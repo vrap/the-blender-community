@@ -25,6 +25,19 @@ $app->get('/recipe/:ruid', function($ruid) {
     echo json_encode($response);
 });
 
+$app->delete('/recipe/:ruid', function($ruid) {
+    try {
+        Recipes::deleteById($ruid);
+
+        $response = array('status' => true, 'data' => array());
+    }
+    catch ($error) {
+        $response = array('status' => false, 'data' => $error);
+    }
+
+    echo json_encode($response);
+});
+
 /**
  * User related methods.
  */
@@ -42,19 +55,6 @@ $app->get('/user/:uid', function($uid) {
 });
 $app->get('/logout', function() {
     $response = array('status' => false, 'data' => array());
-
-    echo json_encode($response);
-});
-
-$app->delete('/recipe/:ruid', function($ruid) {
-    try {
-        Recipes::deleteById($ruid);
-
-        $response = array('status' => true, 'data' => array());
-    }
-    catch ($error) {
-        $response = array('status' => false, 'data' => $error);
-    }
 
     echo json_encode($response);
 });
