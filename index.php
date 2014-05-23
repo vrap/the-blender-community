@@ -31,8 +31,8 @@ $app->delete('/recipe/:ruid', function($ruid) {
 
         $response = array('status' => true, 'data' => array());
     }
-    catch ($error) {
-        $response = array('status' => false, 'data' => $error);
+    catch (Exception $e) {
+        $response = array('status' => false, 'data' => $e);
     }
 
     echo json_encode($response);
