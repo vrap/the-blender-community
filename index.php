@@ -63,7 +63,7 @@ $app->get('/logout', function() {
  * Other related methods.
  */
 $app->get('infos', function() {
-    $stats = new array();
+    $stats = array();
 
     echo json_encode($stats);
 });
