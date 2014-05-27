@@ -2,9 +2,7 @@
 // Autoload managed by composer.
 require 'vendor/autoload.php';
 
-// Load repositories.
-require 'lib/repositories/Users.class.php';
-require 'lib/repositories/Recipes.class.php';
+use Vrap\TheBlenderCommunity\Repositories;
 
 // Load Slim framework
 $app = new \Slim\Slim();
