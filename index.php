@@ -3,6 +3,11 @@
 require 'vendor/autoload.php';
 
 use Vrap\TheBlenderCommunity\Repositories;
+use Vrap\TheBlenderCommunity;
+
+$configuration = TheBlenderCommunity\Configurator::getInstance()->load(
+    join(DIRECTORY_SEPARATOR, array(__DIR__, 'config.ini'))
+);
 
 // Load Slim framework
 $app = new \Slim\Slim();
