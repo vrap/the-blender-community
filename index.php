@@ -60,7 +60,7 @@ $app->get('/logout', function() {
 /**
  * Other related methods.
  */
-$app->get('infos', function() {
+$app->get('/infos', function() {
     $stats = array();
 
     echo json_encode($stats);
