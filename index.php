@@ -51,6 +51,7 @@ $app->get('/user/:uid', function($uid) {
 
     echo json_encode($response);
 });
+
 $app->get('/logout', function() {
     $response = array('status' => false, 'data' => array());
 
@@ -66,5 +67,7 @@ $app->get('/infos', function() {
     echo json_encode($stats);
 });
 
-// Start Slim application.
+/**
+ * Start Slim application.
+ */
 $app->run();
