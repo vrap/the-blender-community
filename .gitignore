@@ -1,3 +1,6 @@
 # Composer files
 vendor/
 composer.lock
+
+# Config file of the Community Server
+config.ini
