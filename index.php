@@ -65,3 +65,6 @@ $app->get('infos', function() {
 
     echo json_encode($stats);
 });
+
+// Start Slim application.
+$app->run();
