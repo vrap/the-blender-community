@@ -11,7 +11,7 @@ $app = new \Slim\Slim();
  * Recipe related methods.
  */
 $app->get('/recipe/:ruid', function($ruid) {
-    $recipe = Recipes::retrieveById($ruid);
+    $recipe = Repositories\Recipes::retrieveById($ruid);
 
     if ($recipe) {
         $response = array('status' => true, 'data' => $recipe);
@@ -25,7 +25,7 @@ $app->get('/recipe/:ruid', function($ruid) {
 
 $app->delete('/recipe/:ruid', function($ruid) {
     try {
-        Recipes::deleteById($ruid);
+        Repositories\Recipes::deleteById($ruid);
 
         $response = array('status' => true, 'data' => array());
     }
@@ -40,7 +40,7 @@ $app->delete('/recipe/:ruid', function($ruid) {
  * User related methods.
  */
 $app->get('/user/:uid', function($uid) {
-    $user = Users::retrieveById($uid);
+    $user = Repositories\Users::retrieveById($uid);
 
     if ($user) {
         $response = array('status' => true, 'data' => $user);
