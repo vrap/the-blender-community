@@ -5,7 +5,7 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Retrieve all existing recipes
      * 
-     * @return [Array] An array with recipes data.
+     * @return Array An array with recipes data
      */
     public static function retrieveAll() {
         $sql = '
@@ -30,8 +30,8 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Retrieve a recipe.
      * 
-     * @param  [String] $ruid [description]
-     * @return [Array]        An array containing the recipe data
+     * @param  String $ruid The uuid of the recipe
+     * @return Array        An array containing the recipe data
      */
     public static function retrieveById($ruid) {
         $sql = '
@@ -60,8 +60,8 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Retrieve recipes of a user.
      * 
-     * @param  [String] $uuid UID of the user
-     * @return [Array]        An array with recipes data.
+     * @param  String $uuid The uuid of the user
+     * @return Array        An array with recipes data
      */
     public static function retrieveByUser($uuid) {
         $sql = '
@@ -90,8 +90,8 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Remove a recipe.
      * 
-     * @param  [String] $ruid The uuid of the recipe to remove
-     * @return [Boolean]      Return true
+     * @param  String $ruid The uuid of the recipe
+     * @return Boolean      Return true
      */
     public static function remove($ruid) {
         $sql = '
