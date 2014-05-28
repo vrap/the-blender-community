@@ -62,8 +62,8 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
         $sql = '
             INSERT INTO
                 `users`
-            (username, email, password)
-            VALUES(:username, :email, :password)
+            (uuid, username, email, password)
+            VALUES(UUID(), :username, :email, :password)
         ';
         $stmt = self::getDatabase()->prepare($sql);
 
