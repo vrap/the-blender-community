@@ -51,11 +51,26 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
         return $user;
     }
 
-    public static function delete($id) {
+    /**
+    * Save a user to database.
+    *
+    * @param String $username A username
+    * @param String $email An email address
+    * @param String $password The password of the user
+    */
+    public static function save($username, $email, $password) {
+        $sql = '
+            INSERT INTO
+                `users`
+            (username, email, password)
+            VALUES(:username, :email, :password)
+        ';
+        $stmt = self::getDatabase()->prepare($sql);
 
-    }
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':password', base64_encode(openssl_digest($password, 'sha512')));
 
-    public static function register($id, $email, $password) {
-
+        return $stmt->execute();
     }
 }
