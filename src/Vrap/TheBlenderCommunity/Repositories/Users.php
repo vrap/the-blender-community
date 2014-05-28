@@ -51,6 +51,54 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
         return $user;
     }
 
+    public static function retrieveByEmail($email) {
+        $sql = '
+            SELECT
+                `uuid`
+            FROM
+                `users`
+            WHERE
+                `email` = :email
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':email', $email);
+
+        $stmt->execute();
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $user;
+    }
+
+    public static function retrieveByUsername($username) {
+        $sql = '
+            SELECT
+                `uuid`
+            FROM
+                `users`
+            WHERE
+                `username` = :username
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':username', $username);
+
+        $stmt->execute();
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $user;
+    }
+
     /**
     * Save a user to database.
     *
