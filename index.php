@@ -28,6 +28,19 @@ $app->get('/recipe/:ruid', function($ruid) {
     echo json_encode($response);
 });
 
+$app->get('/recipes', function() {
+    $recipes = Repositories\Recipes::retrieveAll();
+
+    if ($recipes) {
+        $response = array('status' => true, 'data' => $recipes);
+    }
+    else {
+        $response = array('status' => false);
+    }
+
+    echo json_encode($response);
+});
+
 $app->delete('/recipe/:ruid', function($ruid) {
     try {
         Repositories\Recipes::deleteById($ruid);
