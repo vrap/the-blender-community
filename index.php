@@ -68,6 +68,19 @@ $app->get('/user/:uid', function($uid) {
     echo json_encode($response);
 });
 
+$app->get('/users', function() {
+    $users = Repositories\Users::retrieveAll();
+
+    if ($users) {
+        $response = array('status' => true, 'data' => $users);
+    }
+    else {
+        $response = array('status' => false);
+    }
+
+    echo json_encode($response);
+});
+
 $app->get('/logout', function() {
     $response = array('status' => false, 'data' => array());
 
