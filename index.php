@@ -86,6 +86,38 @@ $app->get('/users', function() {
     echo json_encode($response);
 });
 
+$app->post('/register', function() use($app) {
+    $response = array('status' => false, 'data' => array());
+
+    $username = $app->request()->post('username');
+    $email    = $app->request()->post('email');
+    $password = $app->request()->post('password');
+
+    if (!empty($username) && !empty($email) && !empty($password)) {
+        // Validate email
+        $pattern = '/^[a-zA-Z0-9+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/';
+        $validateEmail = preg_match($pattern, $email);
+
+        if (!$validateEmail) {
+            $response['data']['error'] = 'ERR_EMAIL_NOT_VALID';
+        }
+        elseif (Repositories\Users::retrieveByEmail($email)) {
+            $response['data']['error'] = 'ERR_EMAIL_ALREADY_EXIST';
+        }
+        elseif (Repositories\Users::retrieveByUsername($username)) {
+            $response['data']['error'] = 'ERR_USERNAME_ALREADY_EXIST';
+        }
+
+        if (!isset($response['data']['error'])) {
+            if (Repositories\Users::save($username, $email, $password)) {
+                $response['status'] = true;
+            }
+        }
+    }
+
+    echo json_encode($response);
+});
+
 $app->get('/logout', function() {
     $response = array('status' => false, 'data' => array());
 
