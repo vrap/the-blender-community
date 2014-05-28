@@ -51,8 +51,34 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         return $recipe;
     }
 
-    public static function retrieveByUser($uid) {
+    /**
+     * Retrieve recipes of a user.
+     * 
+     * @param  [String] $uuid UID of the user
+     * @return [Array]        An array with recipes data.
+     */
+    public static function retrieveByUser($uuid) {
+        $sql = '
+            SELECT
+                `uuid`, `name`, `author`, `created`, `updated`, `forked`
+            FROM
+                `recipes`
+            WHERE
+                `author` = :uuid
+        ';
 
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':uuid', $uuid);
+
+        $stmt->execute();
+
+        $recipes = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $recipes;
     }
 
     /**
