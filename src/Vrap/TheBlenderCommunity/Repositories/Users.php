@@ -27,8 +27,28 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
         return $users;
     }
 
-    public static function retrieveById($id) {
+    public static function retrieveById($uuid) {
+        $sql = '
+            SELECT
+                `uuid`, `username`
+            FROM
+                `users`
+            WHERE
+                `uuid` = :uuid
+        ';
 
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':uuid', $uuid);
+
+        $stmt->execute();
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $user;
     }
 
     public static function delete($id) {
