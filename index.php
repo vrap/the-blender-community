@@ -15,7 +15,7 @@ $app = new \Slim\Slim();
 /**
  * Recipe related methods.
  */
-$app->get('/recipe/:ruid', function($ruid) {
+$app->get('/recipes/:ruid', function($ruid) {
     $recipe = Repositories\Recipes::retrieveById($ruid);
 
     if ($recipe) {
@@ -41,7 +41,7 @@ $app->get('/recipes', function() {
     echo json_encode($response);
 });
 
-$app->delete('/recipe/:ruid', function($ruid) {
+$app->delete('/recipes/:ruid', function($ruid) {
     if (Repositories\Recipes::remove($ruid)) {
         $response = array('status' => true, 'data' => array());
     }
@@ -55,7 +55,7 @@ $app->delete('/recipe/:ruid', function($ruid) {
 /**
  * User related methods.
  */
-$app->get('/user/:uid', function($uid) {
+$app->get('/users/:uid', function($uid) {
     $user = Repositories\Users::retrieveById($uid);
 
     if ($user) {
