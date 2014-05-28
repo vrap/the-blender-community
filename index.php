@@ -12,6 +12,11 @@ $configuration = TheBlenderCommunity\Configurator::getInstance()->load(
 // Load Slim framework
 $app = new \Slim\Slim();
 
+// Add CORS autorisations
+$app->response->header('Access-Control-Allow-Origin', '*'); 
+$app->response->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, X-authentication, X-client');
+$app->response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
 /**
  * Recipe related methods.
  */
