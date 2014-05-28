@@ -1,5 +1,7 @@
 <?php
-class Users {
+namespace Vrap\TheBlenderCommunity\Repositories;
+
+class Users extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Retrieve all existing recipes
      * 
