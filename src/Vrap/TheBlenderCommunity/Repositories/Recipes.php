@@ -105,8 +105,6 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         $stmt = self::getDatabase()->prepare($sql);
         $stmt->bindValue(':ruid', $ruid);
 
-        $stmt->execute();
-
-        return true;
+        return $stmt->execute();
     }
 }
