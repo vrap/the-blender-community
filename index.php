@@ -46,7 +46,7 @@ $app->delete('/recipe/:ruid', function($ruid) {
         $response = array('status' => true, 'data' => array());
     }
     else {
-        $response = array('status' => false, 'data' => $e);
+        $response = array('status' => false);
     }
 
     echo json_encode($response);
