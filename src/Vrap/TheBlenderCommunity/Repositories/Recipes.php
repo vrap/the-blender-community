@@ -34,7 +34,26 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
 
     }
 
-    public static function delete($ruid) {
+    /**
+     * Remove a recipe.
+     * 
+     * @param  [String] $ruid The uuid of the recipe to remove
+     * @return [Boolean]      Return true
+     */
+    public static function remove($ruid) {
+        $sql = '
+            DELETE
+            FROM
+                `recipes`
+            WHERE
+                `uuid` = :ruid
+        ';
 
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':ruid', $uid);
+
+        $stmt->execute();
+
+        return true;
     }
 }
