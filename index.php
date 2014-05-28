@@ -42,12 +42,10 @@ $app->get('/recipes', function() {
 });
 
 $app->delete('/recipe/:ruid', function($ruid) {
-    try {
-        Repositories\Recipes::deleteById($ruid);
-
+    if (Repositories\Recipes::remove($ruid)) {
         $response = array('status' => true, 'data' => array());
     }
-    catch (Exception $e) {
+    else {
         $response = array('status' => false, 'data' => $e);
     }
 
