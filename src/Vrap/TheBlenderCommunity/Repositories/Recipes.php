@@ -18,7 +18,7 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         $stmt = self::getDatabase()->prepare($sql);
         $stmt->execute();
 
-        $recipes = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $recipes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (false === $stmt) {
             return false;
@@ -78,7 +78,7 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
 
         $stmt->execute();
 
-        $recipes = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $recipes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (false === $stmt) {
             return false;
