@@ -5,7 +5,7 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Retrieve all existing recipes
      * 
-     * @return [Array] An array of recipes
+     * @return [Array] An array with recipes data.
      */
     public static function retrieveAll() {
         $sql = '
@@ -27,6 +27,12 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         return $recipes;
     }
 
+    /**
+     * Retrieve a recipe.
+     * 
+     * @param  [String] $ruid [description]
+     * @return [Array]        An array containing the recipe data
+     */
     public static function retrieveById($ruid) {
         $sql = '
             SELECT
