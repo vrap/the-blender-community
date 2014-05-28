@@ -2,8 +2,29 @@
 namespace Vrap\TheBlenderCommunity\Repositories;
 
 class Recipes extends \Vrap\TheBlenderCommunity\Repository {
+    /**
+     * Retrieve all existing recipes
+     * 
+     * @return [Array] An array of recipes
+     */
     public static function retrieveAll() {
+        $sql = '
+            SELECT
+                `uuid`, `name`, `author`, `created`, `updated`, `forked`
+            FROM
+                `recipes`
+        ';
 
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->execute();
+
+        $recipes = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $recipes;
     }
 
     public static function retrieveById($ruid) {
