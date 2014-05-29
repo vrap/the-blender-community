@@ -24,6 +24,24 @@ $app->get('/recipes/:ruid', function($ruid) {
     $recipe = Repositories\Recipes::retrieveById($ruid);
 
     if ($recipe) {
+        // Retrieve steps of the recipe
+        $steps = Repositories\RecipeSteps::retrieveByRecipe($recipe);
+
+        // If steps exists, add params of each steps
+        if ($steps) {
+            foreach ($steps as $key => $step) {
+                $params = Repositories\RecipeStepValues::retrieveByRecipeStep($step);
+
+                $steps[$key]['params'] = $params;
+            }
+        }
+        else {
+            $steps = array();
+        }
+
+        // Add steps to the recipe and return the response
+        $recipe['steps'] = $steps;
+
         $response = array('status' => true, 'data' => $recipe);
     }
     else {
