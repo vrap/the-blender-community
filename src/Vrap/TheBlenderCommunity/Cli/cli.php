@@ -1,3 +1,4 @@
+#!/bin/php
 <?php
 
 /**
@@ -16,19 +17,41 @@
 
 // FIY, behavior is largely inspired by the behavior of namp.
 
+require_once 'vendor/autoload.php';
+
 print 'Community CLI - beta (https://github.com/vrap/the-blender-community)' . "\n";
 
+$cliCmd = new Commando\Command();
+
+// Define first option
+$cliCmd->option()
+    ->require()
+    ->describedAs('Resource');
+
+// Define a flag "-c" a.k.a. "--read"
+$cliCmd->option('r')
+    ->aka('read')
+    ->describedAs('Read a resource')
+    ->must(function($title) {
+        $titles = array('Mister', 'Mr', 'Misses', 'Mrs', 'Miss', 'Ms');
+        
+        return in_array($title, $titles);
+    });
+
+// Define a flag "-d" aka "--delete"
+$cliCmd->option('d')
+    ->aka('delete')
+    ->describedAs('Delete a resource');
+
+
+/*
 $helpText = 'Usage: php cli.php [Operation] [Resource]' . "\n" .
             'OPERATION:' . "\n" .
-                "\t" . '- Create: ' . "\n" .
                 "\t" . '- Read:' . "\n" .
-                "\t" . '- Update:' . "\n" .
                 "\t" . '- Delete:' . "\n" .
             'RESOURCE:' . "\n" .
             'EXAMPLES:' . "\n" .
-                "\t" . '- Create User:   php cli.php -c User' . "\n" .
                 "\t" . '- Read Recipe:   php cli.php -r Recipe'  . "\n" .
-                "\t" . '- Update Recipe: php cli.php -u Recipe'  . "\n" .
                 "\t" . '- Delete User:   php cli.php -d User' . "\n";
 
 if ($argc < 1) {
@@ -37,7 +60,7 @@ if ($argc < 1) {
 else {
     print $helpText;
 }
-
+*/
 /*
 May be useful:
 

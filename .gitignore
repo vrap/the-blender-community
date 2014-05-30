@@ -1,6 +1,7 @@
 # Composer files
 vendor/
 composer.lock
+composer.phar
 
 # Config file of the Community Server
 config.ini

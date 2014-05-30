@@ -1,7 +1,7 @@
 <?php
 namespace Vrap\TheBlenderCommunity;
 
-// Import the required namesapces.
+// Import the required namespaces.
 use Vrap\TheBlenderCommunity\Utils\Singleton;
 
 /**
