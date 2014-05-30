@@ -104,31 +104,38 @@ $app->get('/users', function() {
     echo json_encode($response);
 });
 
-$app->post('/register', function() use($app) {
+$app->get('/register', function() use($app) {
+    $config = \Vrap\TheBlenderCommunity\Configurator::getInstance();
+    $params = $config->get('params', false);
     $response = array('status' => false, 'data' => array());
 
-    $username = $app->request()->post('username');
-    $email    = $app->request()->post('email');
-    $password = $app->request()->post('password');
+    if ($params && isset($params['private']) && (bool)$params['private'] === true) {
+        $response['data']['error'] = 'ERR_PRIVATE_COMMUNITY';
+    }
+    else {
+        $username = $app->request()->post('username');
+        $email    = $app->request()->post('email');
+        $password = $app->request()->post('password');
 
-    if (!empty($username) && !empty($email) && !empty($password)) {
-        // Validate email
-        $pattern = '/^[a-zA-Z0-9+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/';
-        $validateEmail = preg_match($pattern, $email);
+        if (!empty($username) && !empty($email) && !empty($password)) {
+            // Validate email
+            $pattern = '/^[a-zA-Z0-9+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/';
+            $validateEmail = preg_match($pattern, $email);
 
-        if (!$validateEmail) {
-            $response['data']['error'] = 'ERR_EMAIL_NOT_VALID';
-        }
-        elseif (Repositories\Users::retrieveByEmail($email)) {
-            $response['data']['error'] = 'ERR_EMAIL_ALREADY_EXIST';
-        }
-        elseif (Repositories\Users::retrieveByUsername($username)) {
-            $response['data']['error'] = 'ERR_USERNAME_ALREADY_EXIST';
-        }
+            if (!$validateEmail) {
+                $response['data']['error'] = 'ERR_EMAIL_NOT_VALID';
+            }
+            elseif (Repositories\Users::retrieveByEmail($email)) {
+                $response['data']['error'] = 'ERR_EMAIL_ALREADY_EXIST';
+            }
+            elseif (Repositories\Users::retrieveByUsername($username)) {
+                $response['data']['error'] = 'ERR_USERNAME_ALREADY_EXIST';
+            }
 
-        if (!isset($response['data']['error'])) {
-            if (Repositories\Users::save($username, $email, $password)) {
-                $response['status'] = true;
+            if (!isset($response['data']['error'])) {
+                if (Repositories\Users::save($username, $email, $password)) {
+                    $response['status'] = true;
+                }
             }
         }
     }
