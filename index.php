@@ -146,9 +146,16 @@ $app->get('/logout', function() {
  * Other related methods.
  */
 $app->get('/infos', function() {
-    $stats = array();
+    $infos = array();
+    $config = \Vrap\TheBlenderCommunity\Configurator::getInstance();
 
-    echo json_encode($stats);
+    $infos['general'] = $config->get('community');
+    $infos['stats'] = array(
+        'users' => Repositories\Users::count(),
+        'recipes' => Repositories\Recipes::count()
+    );
+
+    echo json_encode($infos);
 });
 
 /**
