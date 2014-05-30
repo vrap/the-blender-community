@@ -107,4 +107,20 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
 
         return $stmt->execute();
     }
+
+    /**
+     * Count all existing recipes
+     * 
+     * @return Integer Number of recipes
+     */
+    public static function count() {
+        $sql = '
+            SELECT
+                count(`uuid`)
+            FROM
+                `recipes`
+        ';
+
+        return (int) self::getDatabase()->query($sql)->fetchColumn();
+    }
 }

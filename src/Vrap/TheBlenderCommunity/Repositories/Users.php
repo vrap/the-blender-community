@@ -121,4 +121,20 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
 
         return $stmt->execute();
     }
+
+    /**
+     * Count all existing users
+     * 
+     * @return Integer Number of users
+     */
+    public static function count() {
+        $sql = '
+            SELECT
+                count(`uuid`)
+            FROM
+                `users`
+        ';
+
+        return (int) self::getDatabase()->query($sql)->fetchColumn();
+    }
 }
