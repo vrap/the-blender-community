@@ -20,7 +20,7 @@ print 'Community CLI - beta (https://github.com/vrap/the-blender-community)' . "
 
 // List command
 // Usage: cli.php -l Resource [-n]
-
+/*
 $listCmd = new Commando\Command();
 
 // Define a flag "-l" a.k.a. "--list"
@@ -109,7 +109,7 @@ function sizeColumn($column) {
     $spaces .= '|';
 
     return $spaces;
-}
+}*/
 
 // Read command
 // cli.php -r Resource ResourceId
@@ -127,13 +127,35 @@ $readCmd->flag('r')
         return in_array($arg, $resources);
     });
 
-$listCmd->argument()
+$readCmd->argument()
     ->require()
-    ->describedAs('Resource id')
+    ->describedAs('Resource name')
+    ->needs('r')
     ->must(function($arg) {
-        return ($arg > 0);
+        return (is_string($arg));
     });
 
+$singleResource = array();
+$resource       = $readCmd['r'];
+$resourceName   = $readCmd[0];
+
+switch ($resource) {
+    case 'User':
+        $singleResource = Repositories\Users::retrieveByUser();
+        
+        break;
+    case 'Recipe':
+        $singleResource = Repositories\Recipes::retrieveByUser();
+
+        break;
+    default:
+        
+        break;
+}
+
+if ($singleResource) {
+    
+}
 
 
 
