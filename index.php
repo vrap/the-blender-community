@@ -177,6 +177,13 @@ $app->post(
 
 $app->get(
     '/logout',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === false) {
+            $app->halt(403);
+        }
+    },
     function() {
         $response = array('status' => false, 'data' => array());
 
