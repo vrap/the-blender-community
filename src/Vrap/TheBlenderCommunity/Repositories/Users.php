@@ -99,6 +99,33 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
         return $user;
     }
 
+    public static function retrieveByUsernameAndPassword($username, $password) {
+        $sql = '
+            SELECT
+                `uuid`
+            FROM
+                `users`
+            WHERE
+                `username` = :username
+                AND
+                `password` = :password
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':password', base64_encode(openssl_digest($password, 'sha512')));
+
+        $stmt->execute();
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $user;
+    }
+
     /**
     * Save a user to database.
     *
