@@ -129,6 +129,13 @@ $app->get(
 $app->post(
     '/register',
     function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
+    function() use($app) {
         $config = \Vrap\TheBlenderCommunity\Configurator::getInstance();
         $params = $config->get('params', false);
         $response = array('status' => false, 'data' => array());
