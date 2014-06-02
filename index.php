@@ -126,7 +126,7 @@ $app->get(
     }
 );
 
-$app->get(
+$app->post(
     '/register',
     function() use($app) {
         $config = \Vrap\TheBlenderCommunity\Configurator::getInstance();
