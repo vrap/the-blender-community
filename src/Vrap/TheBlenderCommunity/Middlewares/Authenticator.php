@@ -34,8 +34,8 @@ class Authenticator {
             return ($this->user) ? true : false;
         }
 
-        $session = Repositories\Sessions::retrieveByToken($token);
-        $user    = Repositories\Users::retrieveById($session['user_id']);
+        $session = Repositories\UserSessions::retrieveByToken($token);
+        $user    = Repositories\Users::retrieveById($session['user']);
 
         $this->alreadyCheckedToken = true;
 
