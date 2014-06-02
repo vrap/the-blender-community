@@ -29,6 +29,13 @@ $app->response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, 
  */
 $app->get(
     '/recipes/:ruid',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
     function($ruid) {
         $recipe = Repositories\Recipes::retrieveById($ruid);
 
@@ -63,6 +70,13 @@ $app->get(
 
 $app->get(
     '/recipes',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
     function() {
         $recipes = Repositories\Recipes::retrieveAll();
 
@@ -79,6 +93,13 @@ $app->get(
 
 $app->delete(
     '/recipes/:ruid',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
     function($ruid) {
         if (Repositories\Recipes::remove($ruid)) {
             $response = array('status' => true, 'data' => array());
@@ -96,6 +117,13 @@ $app->delete(
  */
 $app->get(
     '/users/:uid',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
     function($uid) {
         $user = Repositories\Users::retrieveById($uid);
 
@@ -112,6 +140,13 @@ $app->get(
 
 $app->get(
     '/users',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
     function() {
         $users = Repositories\Users::retrieveAll();
 
