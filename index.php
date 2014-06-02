@@ -3,6 +3,7 @@
 require 'vendor/autoload.php';
 
 use Vrap\TheBlenderCommunity\Repositories;
+use Vrap\TheBlenderCommunity\Middlewares;
 use Vrap\TheBlenderCommunity;
 
 $configuration = TheBlenderCommunity\Configurator::getInstance()->load(
@@ -11,6 +12,12 @@ $configuration = TheBlenderCommunity\Configurator::getInstance()->load(
 
 // Load Slim framework
 $app = new \Slim\Slim();
+
+// Add Slim SessionCookie middleware
+$app->add(new \Slim\Middleware\SessionCookie());
+
+// Instanciate Authenticator
+Middlewares\Authenticator::getInstance()->setApp($app);
 
 // Add CORS autorisations
 $app->response->header('Access-Control-Allow-Origin', '*'); 
