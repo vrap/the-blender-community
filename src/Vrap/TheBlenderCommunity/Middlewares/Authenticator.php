@@ -42,14 +42,22 @@ class Authenticator {
 
         $token = $this->app->getCookie('token');
 
-        if ($token && $this->getUser($token)) {
+        if ($token && $this->verifyToken($token)) {
             return true;
         }
 
         return false;
     }
 
-    private function getUser($token) {
+    public function getUser() {
+        if ($this->user) {
+            return $this->user;
+        }
+
+        return null;
+    }
+
+    private function verifyToken($token) {
         if ($this->user || $this->alreadyCheckedToken) {
             return ($this->user) ? true : false;
         }

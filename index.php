@@ -101,11 +101,23 @@ $app->delete(
         }
     },
     function($ruid) {
-        if (Repositories\Recipes::remove($ruid)) {
-            $response = array('status' => true, 'data' => array());
+        $auth = Middlewares\Authenticator::getInstance();
+        $recipe = Repositories\Recipes::retrieveById($ruid);
+        $response = array('status' => false, 'data' => array());
+
+        if ($recipe) {
+            if (!$auth->getUser() || ($recipe['author'] !== $auth->getUser()['uuid'])) {
+                $response['data'] = 'ERR_UNAUTHORIZED_ACTION';
+            }
+            else {
+                if (Repositories\Recipes::remove($ruid)) {
+                    $response['status'] = true;
+                }
+            }
         }
         else {
-            $response = array('status' => false);
+            $response['status'] = false;
+            $response['data'] = 'ERR_RECIPE_NOT_FOUND';
         }
 
         echo json_encode($response);
