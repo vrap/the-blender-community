@@ -32,7 +32,7 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === true) {
+        if ($auth->isAuth() === false) {
             $app->halt(403);
         }
     },
@@ -73,7 +73,7 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === true) {
+        if ($auth->isAuth() === false) {
             $app->halt(403);
         }
     },
@@ -96,7 +96,7 @@ $app->delete(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === true) {
+        if ($auth->isAuth() === false) {
             $app->halt(403);
         }
     },
@@ -120,7 +120,7 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === true) {
+        if ($auth->isAuth() === false) {
             $app->halt(403);
         }
     },
@@ -143,7 +143,7 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === true) {
+        if ($auth->isAuth() === false) {
             $app->halt(403);
         }
     },
