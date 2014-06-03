@@ -210,6 +210,30 @@ $app->post(
     }
 );
 
+$app->post(
+    '/login',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+
+        $response = array('status' => false, 'data' => array());
+
+        $username = $app->request()->post('username');
+        $password = $app->request()->post('password');
+
+        if (!empty($username) && !empty($password)) {
+            if ($auth->auth($username, $password)) {
+                $response['status'] = true;
+            }
+        }
+
+        echo json_encode($response);
+    }
+);
+
 $app->get(
     '/logout',
     function() use($app) {

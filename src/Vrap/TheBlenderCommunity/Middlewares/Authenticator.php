@@ -15,6 +15,26 @@ class Authenticator {
         $this->app = $app;
     }
 
+    public function auth($username, $password) {
+        $user = Repositories\Users::retrieveByUsernameAndPassword(
+            $username,
+            $password
+        );
+
+        if ($user) {
+            Repositories\UserSessions::removeByUser($user['uuid']);
+            if (Repositories\UserSessions::save($user['uuid'])) {
+                $userSession = Repositories\UserSessions::retrieveByUser($user['uuid']);
+
+                $this->app->setCookie('token', $userSession['token']);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isAuth() {
         if (!$this->app) {
             return false;
