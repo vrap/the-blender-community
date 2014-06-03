@@ -153,7 +153,7 @@ switch ($resource) {
         break;
 }
 
-if ($singleResource) {
+if (! empty($singleResource)) {
     
 }
 
