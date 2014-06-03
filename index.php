@@ -161,6 +161,32 @@ $app->get(
     }
 );
 
+$app->get(
+    '/users/:uid/recipes',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        if ($auth->isAuth() === true) {
+            $app->halt(403);
+        }
+    },
+    function($uid) {
+        $user = Repositories\Users::retrieveById($uid);
+        $response = array('status' => false);
+
+        if ($user) {
+            $recipes = Repositories\Recipes::retrieveByUser($user['uuid']);
+            $response = array('status' => true, 'data' => array('recipes' => array()));
+
+            if ($recipes) {
+                $response['data']['recipes'] = $recipes;
+            }
+        }
+
+        echo json_encode($response);
+    }
+);
+
 $app->post(
     '/register',
     function() use($app) {
