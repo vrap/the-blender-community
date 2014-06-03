@@ -9,6 +9,7 @@ class Authenticator {
     use Singleton;
 
     private $user;
+    private $token = null;
     private $alreadyCheckedToken = false;
 
     public function setApp($app) {
@@ -25,8 +26,9 @@ class Authenticator {
             Repositories\UserSessions::removeByUser($user['uuid']);
             if (Repositories\UserSessions::save($user['uuid'])) {
                 $userSession = Repositories\UserSessions::retrieveByUser($user['uuid']);
+                $this->token = $userSession['token'];
 
-                $this->app->setCookie('token', $userSession['token']);
+                $this->app->setCookie('token', $this->token);
 
                 return true;
             }
@@ -47,6 +49,10 @@ class Authenticator {
         }
 
         return false;
+    }
+
+    public function getToken() {
+        return $this->token;
     }
 
     public function getUser() {
