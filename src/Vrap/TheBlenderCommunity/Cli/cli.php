@@ -4,15 +4,7 @@
 /**
  * Welcome to the Community CLI script
  *
- * It allow to make CRUD (Create, Read, Update, Delete) operations on Community Recipes and Users.
- */
-
-/**
- * Remember section (development help)
- * 
- * $argc: number of arguments passed to the script from the CLI
- * $argv: array of these arguments
- * Use print function to display anything to CLI
+ * It allow to make some operations on Community Recipes and Users.
  */
 
 // https://github.com/nategood/commando
@@ -26,6 +18,9 @@ $configuration = TheBlenderCommunity\Configurator::getInstance()->load('config.i
 
 print 'Community CLI - beta (https://github.com/vrap/the-blender-community)' . "\n\n";
 
+// List command
+// Usage: cli.php -l Resource [-n]
+/*
 $listCmd = new Commando\Command();
 
 // Define a flag "-l" a.k.a. "--list"
@@ -114,48 +109,62 @@ function sizeColumn($column) {
     $spaces .= '|';
 
     return $spaces;
+}*/
+
+// Read command
+// cli.php -r Resource ResourceId
+
+$readCmd = new Commando\Command();
+
+// Define a flag "-r" a.k.a. "--read"
+$readCmd->flag('r')
+    ->require()
+    ->aka('read')
+    ->describedAs('Read a particular resource')
+    ->must(function($arg) {
+        $resources = array('User', 'Recipe');
+
+        return in_array($arg, $resources);
+    });
+
+$readCmd->argument()
+    ->require()
+    ->describedAs('Resource name')
+    ->needs('r')
+    ->must(function($arg) {
+        return (is_string($arg));
+    });
+
+$singleResource = array();
+$resource       = $readCmd['r'];
+$resourceName   = $readCmd[0];
+
+switch ($resource) {
+    case 'User':
+        $singleResource = Repositories\Users::retrieveByUser();
+        
+        break;
+    case 'Recipe':
+        $singleResource = Repositories\Recipes::retrieveByUser();
+
+        break;
+    default:
+        
+        break;
+}
+
+if (! empty($singleResource)) {
+    
 }
 
 
 
 
-// Define first option
-/*$readCmd->argument()
-    ->require()
-    ->describedAs('Resource')
-    ->must(function($resource) {
-        $resources = array('User', 'Recipe');
-
-        return in_array($resource, $resources);
-    });*/
-
-//var_dump($readCmd->getArgumentValues());
-//var_dump($readCmd->getFlagValues());
-
-
-/*
-// Define a flag "-d" aka "--delete"
-$cliCmd->flag('d')
-    ->aka('delete')
-    ->describedAs('Delete a resource');
-
-// Define a flag "-l" aka "--list"
-$cliCmd->flag('l')
-    ->aka('list')
-    ->describedAs('List all items of a resource');
-
-// Define a flag "--reset-password"
-$cliCmd->flag('reset-password')
-    ->describedAs('Reset a User password');
 
 
 
 
 
-// Read a Resource:              cli.php -r Resource ResourceId
-// Delete a Resource:            cli.php -d Resource ResourceId
-// List all items of a Resource: cli.php -l Resource
-// Reset a USer password:        cli.php --reset-password UserId
 
 
 

@@ -1,7 +1,7 @@
 {
     "require": {
         "slim/slim": "2.*",
-        "nategood/commando": "*"
+        "symfony/console": "2.6.*@dev"
     },
     "autoload": {
         "psr-0": {
