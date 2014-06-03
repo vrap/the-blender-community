@@ -265,6 +265,7 @@ $app->post(
         if (!empty($username) && !empty($password)) {
             if ($auth->auth($username, $password)) {
                 $response['status'] = true;
+                $response['data']['token'] = $auth->getToken();
             }
         }
 
