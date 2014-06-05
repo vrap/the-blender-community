@@ -123,4 +123,28 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
 
         return (int) self::getDatabase()->query($sql)->fetchColumn();
     }
+
+    public static function retrieveByName($name) {
+        $sql = '
+            SELECT
+                `uuid`
+            FROM
+                `recipes`
+            WHERE
+                `name` = :name
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':name', $name);
+
+        $stmt->execute();
+
+        $recipe = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $recipe;
+    }
 }

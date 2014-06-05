@@ -13,43 +13,43 @@ use Vrap\TheBlenderCommunity;
 
 $configuration = TheBlenderCommunity\Configurator::getInstance()->load('config.ini');
 
-class ListCommand extends Command {
+class ReadCommand extends Command {
     protected function configure() {
-        $this->setName('community:list')
-            ->setDescription('List all items of a resource')
+        $this->setName('community:read')
+            ->setDescription('Read a particular resource')
             ->addArgument(
                 'resource',
                 InputArgument::REQUIRED,
                 'Resource name'
             )
             ->addOption(
-               'number',
+               'name',
                null,
                InputOption::VALUE_NONE,
-               'Number of rows to retrive'
+               'Name of the resource item'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $resource     = $input->getArgument('resourceName');
-        $numberOfRows = $input->getOption('number');
-        $allResource  = array();
+        $resource       = $input->getArgument('resourceName');
+        $itemName       = $input->getOption('number');
+        $singleResource = array();
 
         switch ($resource) {
             case 'User':
-                $allResource = Repositories\Users::retrieveAll();
-                
+                $singleResource = Repositories\Users::retrieveByUsername($itemName);
+        
                 break;
             case 'Recipe':
-                $allResource = Repositories\Recipes::retrieveAll();
+                $singleResource = Repositories\Recipes::retrieveByName($itemName);
 
                 break;
             default:
-                
-                break;
+        
+            break;
         }
 
-        if (! empty($allResource)) {
+        if (! empty($singleResource)) {
             $columns = '';
             $items   = '';
             $counter = 0;
@@ -86,19 +86,6 @@ class ListCommand extends Command {
             return;
         }
     }
-
-    protected function sizeColumn($column) {
-        $widthColumns  = 20;
-        $spacesCounter = ($widthColumns - strlen($column)); 
-        $spaces        = '';
-
-        for ($i = 0; $i < $spacesCounter; $i++) {
-            $spaces .=  ' ';
-        }
-
-        $spaces .= '|';
-
-        return $spaces;
     }
 }
 
