@@ -150,6 +150,27 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
     }
 
     /**
+     * Remove a user.
+     * 
+     * @param  String $ruid The uuid of the recipe
+     * @return Boolean      Return true
+     */
+    public static function remove($ruid) {
+        $sql = '
+            DELETE
+            FROM
+                `recipes`
+            WHERE
+                `uuid` = :ruid
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':ruid', $ruid);
+
+        return $stmt->execute();
+    }
+
+    /**
      * Count all existing users
      * 
      * @return Integer Number of users
