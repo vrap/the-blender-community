@@ -152,20 +152,20 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
     /**
      * Remove a user.
      * 
-     * @param  String $ruid The uuid of the recipe
+     * @param  String $uuid The uuid of the user
      * @return Boolean      Return true
      */
-    public static function remove($ruid) {
+    public static function remove($uuid) {
         $sql = '
             DELETE
             FROM
-                `recipes`
+                `users`
             WHERE
-                `uuid` = :ruid
+                `uuid` = :uuid
         ';
 
         $stmt = self::getDatabase()->prepare($sql);
-        $stmt->bindValue(':ruid', $ruid);
+        $stmt->bindValue(':uuid', $uuid);
 
         return $stmt->execute();
     }
