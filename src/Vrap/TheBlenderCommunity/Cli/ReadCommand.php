@@ -26,13 +26,13 @@ class ReadCommand extends Command {
                'name',
                null,
                InputOption::VALUE_NONE,
-               'Name of the resource item'
+               'Name of the resource item to read'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $resource       = $input->getArgument('resourceName');
-        $itemName       = $input->getOption('number');
+        $resource       = $input->getArgument('resource');
+        $itemName       = $input->getOption('name');
         $singleResource = array();
 
         switch ($resource) {
@@ -52,17 +52,12 @@ class ReadCommand extends Command {
         if (! empty($singleResource)) {
             $columns = '';
             $items   = '';
-            $counter = 0;
 
-            if (! empty($numberOfRows)) {
-                $allResource = array_slice($allResource, 0, $numberOfRows);
-            }
-
-            foreach ($allResource[0] as $column => $value) {
+            foreach ($singleResource[0] as $column => $value) {
                 $columns .= $column . $this->sizeColumn($column);
             }
 
-            foreach ($allResource as $item => $field) {
+            foreach ($singleResource as $item => $field) {
                 $line = '';
 
                 foreach (array_keys($field) as $key => $value) {
@@ -70,22 +65,19 @@ class ReadCommand extends Command {
                 }
 
                 $items .= $line . "\n";
-
-                $counter++;
             }
 
-            $return = 'List the ' . $counter . ' items of ' . $resource . ':' . "\n\n" .
+            $return = 'Read the ' . $resource . ' with name ' . $itemName . ':' . "\n\n" .
                 $columns . "\n" .
                 $items;
 
             $output->writeln($return);
         }
         else {
-            $output->writeln('No ' . $resource . ' founded.' . "\n");
+            $output->writeln('No ' . $resource . ' with name ' . $itemName . ' founded.' . "\n");
 
             return;
         }
-    }
     }
 }
 
