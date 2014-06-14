@@ -73,13 +73,13 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === false) {
-            $app->halt(403);
-        }
+        // if ($auth->isAuth() === false) {
+        //     $app->halt(403);
+        // }
+        // 
     },
     function() {
-        $recipes = Repositories\Recipes::retrieveAll();
-
+        $recipes = Repositories\Recipes::retrieveAllWithSteps();
         if ($recipes) {
             $response = array('status' => true, 'data' => $recipes);
         }

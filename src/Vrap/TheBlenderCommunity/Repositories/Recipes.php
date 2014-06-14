@@ -2,6 +2,7 @@
 namespace Vrap\TheBlenderCommunity\Repositories;
 
 class Recipes extends \Vrap\TheBlenderCommunity\Repository {
+    
     /**
      * Retrieve all existing recipes
      * 
@@ -10,9 +11,12 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     public static function retrieveAll() {
         $sql = '
             SELECT
-                `uuid`, `name`, `author`, `created`, `updated`, `forked`
+                r.uuid, `name`, `author`, `created`, `updated`, `forked`, `username`
             FROM
-                `recipes`
+                `recipes` `r`
+            INNER JOIN
+                `users` `u`
+            ON r.author = u.uuid
         ';
 
         $stmt = self::getDatabase()->prepare($sql);
@@ -25,6 +29,54 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         }
 
         return $recipes;
+    }
+
+    /**
+     * Retrieve all existing recipes
+     * With all Step end Ingredient
+     * @return Array An array with recipes data
+     */
+    public static function retrieveAllWithSteps() {
+
+        // get all recipes
+        $recipes = self::retrieveAll();
+
+        // If no recipes return false
+        if (false === $recipes) {
+            return false;
+        }
+
+        // Read all Recipes
+        for ($i=0; $i < count($recipes); $i++) {
+            // Retrive his step
+            $steps = RecipeSteps::retrieveByRecipe($recipes[$i]);
+
+            if(false != $steps){
+
+                // Put in recipe
+                $recipes[$i]['steps'] = $steps;
+                // Read all Steps
+                for ($y=0; $y < count($steps); $y++) { 
+                    // Put in Recipe/step
+                    $parameters = RecipeStepValues::retrieveByRecipeStep($steps[$y]);
+
+                    if(false != $parameters){
+                        $recipes[$i]['steps'][$y]['parameters'] = $parameters;
+                    }else{
+                        $recipes[$i]['steps'][$y]['parameters'] = '';
+                    }
+                    
+                }
+
+            }else{
+                $recipes[$i]['steps'] = '';
+            }
+            
+        }
+
+        // Return the yummy recipes
+        return $recipes;
+   
     }
 
     /**
