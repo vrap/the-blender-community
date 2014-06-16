@@ -2,6 +2,42 @@
 namespace Vrap\TheBlenderCommunity\Repositories;
 
 class RecipeSteps extends \Vrap\TheBlenderCommunity\Repository {
+
+    /**
+     * Save the steps of recipe
+     * @param  int $recipeUuid
+     * @param  step $step
+     * @return bool
+     */
+    public static function save($recipeUuid, $step){
+
+        $db = self::getDatabase();
+
+        $sql = '
+            INSERT INTO
+                `recipe_steps`  (`recipes_uuid`, `order`, `action`)
+            VALUES
+                (:recipesUuid, :order, :action)
+        ';
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':recipesUuid', $recipeUuid);
+        $stmt->bindValue(':order', $step->order);
+        $stmt->bindValue(':action', $step->action);
+        $result = $stmt->execute();
+
+        $recipeStepId = $db->lastInsertId();
+
+        // Call all parameters and save them
+        foreach ($step->parameters as $parameter) {
+            RecipeStepValues::save($recipeStepId, $parameter);
+        }
+
+        return $result;
+
+    }
+
     /**
      * Retrieve a recipe.
      * 

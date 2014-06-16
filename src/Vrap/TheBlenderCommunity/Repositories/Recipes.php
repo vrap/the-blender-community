@@ -3,9 +3,39 @@ namespace Vrap\TheBlenderCommunity\Repositories;
 
 class Recipes extends \Vrap\TheBlenderCommunity\Repository {
     
+
+    /**
+     * Save the recipe
+     * @param  recipe $recipe
+     * @return bool
+     */
+    public static function save($recipe){
+
+        $recipeUuid = \Vrap\TheBlenderCommunity\Utils\UUID::v4();
+        $sql = '
+            INSERT INTO
+                recipes (uuid, name, author, created)
+            VALUES
+                (:uuid, :name, :author, NOW())
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':uuid', $recipeUuid);
+        $stmt->bindValue(':name', $recipe->name);
+        $stmt->bindValue(':author', $recipe->author);
+        $result = $stmt->execute();
+
+        // Call all steps and save them
+        foreach ($recipe->steps as $steps) {
+            RecipeSteps::save($recipeUuid, $steps);
+        }
+
+        return $result;
+
+    }
+
     /**
      * Retrieve all existing recipes
-     * 
      * @return Array An array with recipes data
      */
     public static function retrieveAll() {
