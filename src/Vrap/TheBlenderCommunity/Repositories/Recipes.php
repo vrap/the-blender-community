@@ -2,17 +2,51 @@
 namespace Vrap\TheBlenderCommunity\Repositories;
 
 class Recipes extends \Vrap\TheBlenderCommunity\Repository {
+    
+
+    /**
+     * Save the recipe
+     * @param  recipe $recipe
+     * @return bool
+     */
+    public static function save($recipe){
+
+        $recipeUuid = \Vrap\TheBlenderCommunity\Utils\UUID::v4();
+        $sql = '
+            INSERT INTO
+                recipes (uuid, name, author, created)
+            VALUES
+                (:uuid, :name, :author, NOW())
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':uuid', $recipeUuid);
+        $stmt->bindValue(':name', $recipe->name);
+        $stmt->bindValue(':author', $recipe->author);
+        $result = $stmt->execute();
+
+        // Call all steps and save them
+        foreach ($recipe->steps as $steps) {
+            RecipeSteps::save($recipeUuid, $steps);
+        }
+
+        return $result;
+
+    }
+
     /**
      * Retrieve all existing recipes
-     * 
      * @return Array An array with recipes data
      */
     public static function retrieveAll() {
         $sql = '
             SELECT
-                `uuid`, `name`, `author`, `created`, `updated`, `forked`
+                r.uuid, `name`, `author`, `created`, `updated`, `forked`, `username`
             FROM
-                `recipes`
+                `recipes` `r`
+            INNER JOIN
+                `users` `u`
+            ON r.author = u.uuid
         ';
 
         $stmt = self::getDatabase()->prepare($sql);
@@ -25,6 +59,54 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         }
 
         return $recipes;
+    }
+
+    /**
+     * Retrieve all existing recipes
+     * With all Step end Ingredient
+     * @return Array An array with recipes data
+     */
+    public static function retrieveAllWithSteps() {
+
+        // get all recipes
+        $recipes = self::retrieveAll();
+
+        // If no recipes return false
+        if (false === $recipes) {
+            return false;
+        }
+
+        // Read all Recipes
+        for ($i=0; $i < count($recipes); $i++) {
+            // Retrive his step
+            $steps = RecipeSteps::retrieveByRecipe($recipes[$i]);
+
+            if(false != $steps){
+
+                // Put in recipe
+                $recipes[$i]['steps'] = $steps;
+                // Read all Steps
+                for ($y=0; $y < count($steps); $y++) { 
+                    // Put in Recipe/step
+                    $parameters = RecipeStepValues::retrieveByRecipeStep($steps[$y]);
+
+                    if(false != $parameters){
+                        $recipes[$i]['steps'][$y]['parameters'] = $parameters;
+                    }else{
+                        $recipes[$i]['steps'][$y]['parameters'] = '';
+                    }
+                    
+                }
+
+            }else{
+                $recipes[$i]['steps'] = '';
+            }
+            
+        }
+
+        // Return the yummy recipes
+        return $recipes;
+   
     }
 
     /**
@@ -122,5 +204,29 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         ';
 
         return (int) self::getDatabase()->query($sql)->fetchColumn();
+    }
+
+    public static function retrieveByName($name) {
+        $sql = '
+            SELECT
+                `uuid`
+            FROM
+                `recipes`
+            WHERE
+                `name` = :name
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':name', $name);
+
+        $stmt->execute();
+
+        $recipe = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (false === $stmt) {
+            return false;
+        }
+
+        return $recipe;
     }
 }

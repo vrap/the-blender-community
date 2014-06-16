@@ -21,8 +21,15 @@ Middlewares\Authenticator::getInstance()->setApp($app);
 
 // Add CORS autorisations
 $app->response->header('Access-Control-Allow-Origin', '*'); 
-$app->response->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, X-authentication, X-client');
+$app->response->header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 $app->response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+/**
+ * Truc chelou recupéré sur le net pour resoudre problème CORS avec OPTION
+ */
+$app->map('/:x+', function($x) {
+    http_response_code(200);
+})->via('OPTIONS');
 
 /**
  * Recipe related methods.
@@ -73,13 +80,13 @@ $app->get(
     function() use($app) {
         $auth = Middlewares\Authenticator::getInstance();
 
-        if ($auth->isAuth() === false) {
-            $app->halt(403);
-        }
+        // if ($auth->isAuth() === false) {
+        //     $app->halt(403);
+        // }
+        // 
     },
     function() {
-        $recipes = Repositories\Recipes::retrieveAll();
-
+        $recipes = Repositories\Recipes::retrieveAllWithSteps();
         if ($recipes) {
             $response = array('status' => true, 'data' => $recipes);
         }
@@ -88,6 +95,33 @@ $app->get(
         }
 
         echo json_encode($response);
+    }
+);
+
+$app->post(
+    '/recipes',
+    function() use($app) {
+        $auth = Middlewares\Authenticator::getInstance();
+
+        // if ($auth->isAuth() === false) {
+        //     $app->halt(403);
+        // }
+        // 
+    },
+    function() use($app){
+
+        $response = array('status' => false, 'data' => array());
+
+        $recipe = json_decode($app->request()->post('data'));
+        $result = Repositories\Recipes::save($recipe);
+
+        if($result){
+            $response = array('status' => true, 'data' => array());
+        }
+        
+        echo json_encode($response);
+
+
     }
 );
 
@@ -264,8 +298,14 @@ $app->post(
 
         if (!empty($username) && !empty($password)) {
             if ($auth->auth($username, $password)) {
+
+                // get User
+                $user = Repositories\Users::retrieveByUsername($username);
+
                 $response['status'] = true;
+                $response['user'] = $user;
                 $response['data']['token'] = $auth->getToken();
+
             }
         }
 
