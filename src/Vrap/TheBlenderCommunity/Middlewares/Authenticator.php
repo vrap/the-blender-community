@@ -8,8 +8,8 @@ use Vrap\TheBlenderCommunity\Repositories;
 class Authenticator {
     use Singleton;
 
-    private $user;
-    private $token = null;
+    private $user                = null;
+    private $token               = null;
     private $alreadyCheckedToken = false;
 
     public function setApp($app) {
@@ -56,11 +56,7 @@ class Authenticator {
     }
 
     public function getUser() {
-        if ($this->user) {
-            return $this->user;
-        }
-
-        return null;
+        return $this->user;
     }
 
     private function verifyToken($token) {
