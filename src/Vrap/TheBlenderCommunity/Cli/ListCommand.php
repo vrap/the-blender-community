@@ -31,7 +31,7 @@ class ListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $resource     = $input->getArgument('resourceName');
+        $resource     = $input->getArgument('resource');
         $numberOfRows = $input->getOption('number');
         $allResource  = array();
 

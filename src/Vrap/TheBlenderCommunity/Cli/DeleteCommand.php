@@ -13,35 +13,35 @@ use Vrap\TheBlenderCommunity;
 
 $configuration = TheBlenderCommunity\Configurator::getInstance()->load('config.ini');
 
-class ReadCommand extends Command {
+class DeleteCommand extends Command {
     protected function configure() {
-        $this->setName('community:read')
-            ->setDescription('Read a particular resource')
+        $this->setName('community:delete')
+            ->setDescription('Delete a particular resource')
             ->addArgument(
                 'resource',
                 InputArgument::REQUIRED,
                 'Resource name'
             )
             ->addOption(
-               'name',
+               'id',
                null,
                InputOption::VALUE_NONE,
-               'Name of the resource item to read'
+               'Id of the resource item to delete'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $resource       = $input->getArgument('resource');
-        $itemName       = $input->getOption('name');
+        $itemId         = $input->getOption('id');
         $singleResource = array();
 
         switch ($resource) {
             case 'User':
-                $singleResource = Repositories\Users::retrieveByUsername($itemName);
+                $idDeleted = Repositories\Users::remove($itemId);
         
                 break;
             case 'Recipe':
-                $singleResource = Repositories\Recipes::retrieveByName($itemName);
+                $idDeleted = Repositories\Recipes::remove($itemId);
 
                 break;
             default:
@@ -49,32 +49,15 @@ class ReadCommand extends Command {
             break;
         }
 
-        if (! empty($singleResource)) {
-            $columns = '';
-            $items   = '';
-
-            foreach ($singleResource[0] as $column => $value) {
-                $columns .= $column . $this->sizeColumn($column);
-            }
-
-            foreach ($singleResource as $item => $field) {
-                $line = '';
-
-                foreach (array_keys($field) as $key => $value) {
-                    $line .= $field[$value] . $this->sizeColumn($field[$value]);
-                }
-
-                $items .= $line . "\n";
-            }
-
-            $return = 'Read the ' . $resource . ' with name ' . $itemName . ':' . "\n\n" .
+        if ($isDeleted) {
+            $return = 'Delete the ' . $resource . ' with id ' . $itemId . ':' . "\n\n" .
                 $columns . "\n" .
                 $items;
 
             $output->writeln($return);
         }
         else {
-            $output->writeln('No ' . $resource . ' with name ' . $itemName . ' founded.' . "\n");
+            $output->writeln('No ' . $resource . ' with id ' . $itemId . ' removed.' . "\n");
 
             return;
         }

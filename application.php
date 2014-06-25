@@ -5,11 +5,14 @@
 require 'vendor/autoload.php';
 
 use Vrap\TheBlenderCommunity\Cli\ListCommand;
+use Vrap\TheBlenderCommunity\Cli\ReadCommand;
 use \Symfony\Component\Console\Application;
 
 $application = new Application('Community', 'beta');
 
 $application->add(new ListCommand);
+$application->add(new ReadCommand);
+$application->add(new DeleteCommand);
 $application->run();
 
 ?>

@@ -150,6 +150,27 @@ class Users extends \Vrap\TheBlenderCommunity\Repository {
     }
 
     /**
+     * Remove a user.
+     * 
+     * @param  String $uuid The uuid of the user
+     * @return Boolean      Return true
+     */
+    public static function remove($uuid) {
+        $sql = '
+            DELETE
+            FROM
+                `users`
+            WHERE
+                `uuid` = :uuid
+        ';
+
+        $stmt = self::getDatabase()->prepare($sql);
+        $stmt->bindValue(':uuid', $uuid);
+
+        return $stmt->execute();
+    }
+
+    /**
      * Count all existing users
      * 
      * @return Integer Number of users
