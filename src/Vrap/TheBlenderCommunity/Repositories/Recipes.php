@@ -14,15 +14,16 @@ class Recipes extends \Vrap\TheBlenderCommunity\Repository {
         $recipeUuid = \Vrap\TheBlenderCommunity\Utils\UUID::v4();
         $sql = '
             INSERT INTO
-                recipes (uuid, name, author, created)
+                recipes (uuid, name, author, created, forked)
             VALUES
-                (:uuid, :name, :author, NOW())
+                (:uuid, :name, :author, NOW(), :forked)
         ';
 
         $stmt = self::getDatabase()->prepare($sql);
         $stmt->bindValue(':uuid', $recipeUuid);
         $stmt->bindValue(':name', $recipe->name);
         $stmt->bindValue(':author', $recipe->author);
+        $stmt->bindValue(':forked', $recipe->forked);
         $result = $stmt->execute();
 
         // Call all steps and save them
