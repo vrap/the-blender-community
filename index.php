@@ -13,6 +13,9 @@ $configuration = TheBlenderCommunity\Configurator::getInstance()->load(
 // Load Slim framework
 $app = new \Slim\Slim();
 
+// Disable debugging
+$app->config('debug', false);
+
 // Add Slim SessionCookie middleware
 $app->add(new \Slim\Middleware\SessionCookie());
 
