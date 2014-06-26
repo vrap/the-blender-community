@@ -24,8 +24,8 @@ class DeleteCommand extends Command {
             )
             ->addOption(
                'id',
-               null,
-               InputOption::VALUE_NONE,
+               NULL,
+               InputOption::VALUE_REQUIRED,
                'Id of the resource item to delete'
             );
     }
@@ -34,27 +34,23 @@ class DeleteCommand extends Command {
         $resource       = $input->getArgument('resource');
         $itemId         = $input->getOption('id');
         $singleResource = array();
+        $isDeleted      = 0;
 
         switch ($resource) {
-            case 'User':
-                $idDeleted = Repositories\Users::remove($itemId);
-        
-                break;
-            case 'Recipe':
-                $idDeleted = Repositories\Recipes::remove($itemId);
+            case 'Users':
+                $isDeleted = Repositories\Users::remove($itemId);
 
                 break;
-            default:
-        
-            break;
-        }
+            case 'Recipes':
+                $isDeleted = Repositories\Recipes::remove($itemId);
 
-        if ($isDeleted) {
-            $return = 'Delete the ' . $resource . ' with id ' . $itemId . ':' . "\n\n" .
-                $columns . "\n" .
-                $items;
+                break;
+        }       
 
-            $output->writeln($return);
+        if ($isDeleted == 1) {
+            $output->writeln('Delete the ' . $resource . ' with id ' . $itemId . '.' . "\n");
+
+            return;
         }
         else {
             $output->writeln('No ' . $resource . ' with id ' . $itemId . ' removed.' . "\n");

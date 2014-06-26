@@ -24,7 +24,7 @@ class ReadCommand extends Command {
             )
             ->addOption(
                'name',
-               null,
+               NULL,
                InputOption::VALUE_NONE,
                'Name of the resource item to read'
             );
@@ -36,20 +36,17 @@ class ReadCommand extends Command {
         $singleResource = array();
 
         switch ($resource) {
-            case 'User':
+            case 'Users':
                 $singleResource = Repositories\Users::retrieveByUsername($itemName);
         
                 break;
-            case 'Recipe':
+            case 'Recipes':
                 $singleResource = Repositories\Recipes::retrieveByName($itemName);
 
                 break;
-            default:
-        
-            break;
         }
 
-        if (! empty($singleResource)) {
+        if (empty($singleResource) === FALSE) {
             $columns = '';
             $items   = '';
 

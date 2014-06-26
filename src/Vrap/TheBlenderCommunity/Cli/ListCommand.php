@@ -45,9 +45,6 @@ class ListCommand extends Command {
                 $allResource = Repositories\Recipes::retrieveAll();
 
                 break;
-            default:
-                
-                break;
         }
 
         if (empty($allResource) === FALSE) {
