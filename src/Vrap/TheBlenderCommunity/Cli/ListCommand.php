@@ -24,7 +24,7 @@ class ListCommand extends Command {
             )
             ->addOption(
                'number',
-               null,
+               NULL,
                InputOption::VALUE_NONE,
                'Number of rows to retrive'
             );
@@ -36,11 +36,11 @@ class ListCommand extends Command {
         $allResource  = array();
 
         switch ($resource) {
-            case 'User':
+            case 'Users':
                 $allResource = Repositories\Users::retrieveAll();
                 
                 break;
-            case 'Recipe':
+            case 'Recipes':
                 $allResource = Repositories\Recipes::retrieveAll();
 
                 break;
@@ -49,12 +49,12 @@ class ListCommand extends Command {
                 break;
         }
 
-        if (! empty($allResource)) {
+        if (empty($allResource) === FALSE) {
             $columns = '';
             $items   = '';
             $counter = 0;
 
-            if (! empty($numberOfRows)) {
+            if (empty($numberOfRows) === FALSE) {
                 $allResource = array_slice($allResource, 0, $numberOfRows);
             }
 
