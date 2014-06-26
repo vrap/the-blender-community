@@ -25,8 +25,9 @@ class ListCommand extends Command {
             ->addOption(
                'number',
                NULL,
-               InputOption::VALUE_NONE,
-               'Number of rows to retrive'
+               InputOption::VALUE_REQUIRED,
+               'Number of rows to retrive',
+               99
             );
     }
 
